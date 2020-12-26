@@ -72,7 +72,8 @@ data class Node(
         parent: Node? = null,
     ) : this(Position(x, y), direction, parent)
 
-    val path: List<Node> get() = parent?.let { parent.path + this } ?: listOf(this)
+    val path: List<Node>  = parent?.let { parent.path + this } ?: listOf(this)
+
 
     val l: Node // left
         get() = Node(
@@ -91,7 +92,7 @@ data class Node(
             this
         )
 
-    val length: Int get():Int = path.size
+    val length: Int = path.size
 
     override fun toString(): String = parent?.let { parent.toString() + direction.toString() } ?: direction.toString()
 
@@ -153,7 +154,7 @@ class SelfAvoidingPathGenerator(
             while (nodesToExplore.isNotEmpty()) {
                 val n = nodesToExplore.pollLast() ?: return false // no more steps to take
                 var foundSolution = false
-                listOf(n.l, n.f, n.r).forEach { node ->
+                listOf(n.l, n.f, n.r).shuffled().map { node ->
                     if (illegalNodePredicates.none { it(node) }) { // if each generated node legal
                         if (validSolutionPredicates.all { it(node) }) { // if valid node is a solution
                             preCalculatedSolutions.add(node)
@@ -169,24 +170,25 @@ class SelfAvoidingPathGenerator(
         }
 
         override fun next(): Node {
-            val result = preCalculatedSolutions.pollFirst()
-            solutions.add(result)
-            return result
+            preCalculatedSolutions.pollFirst()?.let {
+                solutions.add(it)
+                return it
+            }
+            throw UnsupportedOperationException("next() attempted to return null, have you called hasNext() first?")
         }
-
     }
 }
 
 fun generate(input: String) {
     val gen = SelfAvoidingPathGenerator(
         boundary = Boundary(Position(0, 0), Position(15, 15)),
-        length = 43
+        length = 59
 //        boundary = Boundary(Position(0, 0), Position(7, 7)),
 //        length = 31
     )
 
     var numSolutions = 0
-    for (solution in gen.solution.asSequence().take(200)) {
+    for (solution in gen.solution.asSequence().take(50)) {
         printNode(solution, "@${LocalDateTime.now()} FOUND A SOLUTION #${numSolutions++}:")
     }
 
