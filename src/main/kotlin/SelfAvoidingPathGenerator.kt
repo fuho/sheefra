@@ -1,6 +1,9 @@
 import java.time.LocalDateTime
 import java.util.*
 
+private val Int.isOdd: Boolean get() = this % 2 == 1
+private val Int.isEven: Boolean get() = !this.isOdd
+
 data class Position(val x: Int, val y: Int) {
     operator fun plus(v: Position) = Position(x + v.x, y + v.y)
 }
@@ -72,7 +75,7 @@ data class Node(
         parent: Node? = null,
     ) : this(Position(x, y), direction, parent)
 
-    val path: List<Node>  = parent?.let { parent.path + this } ?: listOf(this)
+    val path: List<Node> = parent?.let { parent.path + this } ?: listOf(this)
 
 
     val l: Node // left
@@ -120,6 +123,9 @@ class SelfAvoidingPathGenerator(
                 length < it.width + it.height - 1
             }) throw InputMismatchException("Requested path length is shorter than shortest possible path from start to end")
         if (boundary.width * boundary.height < length) throw InputMismatchException("Requested path does not fit within the boundary")
+        if (Boundary(start,end).let { it.width * it.height }.isOdd && length.isOdd) throw InputMismatchException("Pretty sure solution doesn't exist :)")
+        if (Boundary(start,end).let { it.width * it.height }.isEven && length.isEven) throw InputMismatchException("Pretty sure solution doesn't exist :)")
+
         nodesToExplore.add(Node(start, startDirection))
         illegalNodePredicates = listOf(
             // If node out of boundary, it is illegal, return true
