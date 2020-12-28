@@ -21,15 +21,30 @@ dependencies {
 }
 
 tasks.withType<KotlinCompile>() {
-    kotlinOptions.jvmTarget = "13"
+    kotlinOptions.jvmTarget = "15"
 }
 
 compose.desktop {
     application {
         mainClass = "MainKt"
         nativeDistributions {
+            packageName = "Sheefra"
+            description = "The all-powerful Sheefra"
+            copyright = "©2020 fuho. All rights reserved."
+            vendor = "I am the vendor"
+            jvmArgs += listOf("-Xmx2G")
+            args += listOf("-customArgument")
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "JetpackComposeDesktop"
+            outputBaseDir.set(project.buildDir.resolve("sheefra"))
+            macOS {
+                iconFile.set(project.file("icon.icns"))
+            }
+            windows {
+                iconFile.set(project.file("icon.ico"))
+            }
+            linux {
+                iconFile.set(project.file("icon.png"))
+            }
         }
     }
 }
