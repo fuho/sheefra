@@ -7,7 +7,7 @@ plugins {
     id("org.jetbrains.compose") version "0.2.0-build132"
 }
 
-group = "org.fuho"
+group = "org.fuho.sheefra"
 version = "1.0"
 
 repositories {
