@@ -1,3 +1,5 @@
+package org.fuho.sheefra
+
 import java.time.LocalDateTime
 import java.util.*
 
@@ -123,8 +125,16 @@ class SelfAvoidingPathGenerator(
                 length < it.width + it.height - 1
             }) throw InputMismatchException("Requested path length is shorter than shortest possible path from start to end")
         if (boundary.width * boundary.height < length) throw InputMismatchException("Requested path does not fit within the boundary")
-        if (Boundary(start,end).let { it.width * it.height }.isOdd && length.isOdd) throw InputMismatchException("Pretty sure solution doesn't exist :)")
-        if (Boundary(start,end).let { it.width * it.height }.isEven && length.isEven) throw InputMismatchException("Pretty sure solution doesn't exist :)")
+        if (Boundary(
+                start,
+                end
+            ).let { it.width * it.height }.isOdd && length.isOdd
+        ) throw InputMismatchException("Pretty sure solution doesn't exist :)")
+        if (Boundary(
+                start,
+                end
+            ).let { it.width * it.height }.isEven && length.isEven
+        ) throw InputMismatchException("Pretty sure solution doesn't exist :)")
 
         nodesToExplore.add(Node(start, startDirection))
         illegalNodePredicates = listOf(

@@ -26,9 +26,9 @@ tasks.withType<KotlinCompile>() {
 
 compose.desktop {
     application {
-        mainClass = "MainKt"
+        mainClass = "org.fuho.sheefra.MainKt"
         nativeDistributions {
-            packageName = "Sheefra"
+            packageName = "sheefra"
             description = "The all-powerful Sheefra"
             copyright = "©2020 fuho. All rights reserved."
             vendor = "I am the vendor"
@@ -41,6 +41,7 @@ compose.desktop {
             }
             windows {
                 iconFile.set(project.file("icon.ico"))
+                menuGroup = "Sheefra"
             }
             linux {
                 iconFile.set(project.file("icon.png"))
